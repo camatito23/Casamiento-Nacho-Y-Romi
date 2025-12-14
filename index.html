@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Corre por el Amor</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=Raleway:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+/* === BASE === */
+body{
+    margin:0;
+    background:#F7F5F2;
+    font-family:'Raleway', sans-serif;
+    color:#2c2c2c;
+    text-align:center;
+    overflow-x:hidden;
+}
+
+.container{
+    max-width:900px;
+    margin:60px auto;
+    padding:20px;
+    position:relative;
+}
+
+
+/* === TÍTULO === */
+h1{
+    font-family:'Playfair Display', serif;
+    font-size:46px;
+    margin-bottom:10px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+}
+
+h1 .emoji{font-size:40px;}
+
+
+/* === INPUT NOMBRE === */
+#nameBox{
+    margin-top:20px;
+    background:white;
+    padding:18px;
+    border-radius:16px;
+    border:1px solid #d9d5cc;
+    box-shadow:0 6px 16px rgba(0,0,0,0.08);
+    max-width:420px;
+    margin-left:auto;
+    margin-right:auto;
+}
+
+#playerName{
+    width:90%;
+    padding:12px;
+    font-size:18px;
+    border-radius:12px;
+    border:2px solid #4A6655;
+    outline:none;
+    font-weight:600;
+    text-align:center;
+}
+
+#playerName:focus{
+    border-color:#2f4f3f;
+}
+
+
+/* === PERSONAJES === */
+.character{
+    width:150px;
+    cursor:pointer;
+    opacity:0.8;
+    transition:0.25s;
+    margin:12px;
+    border-radius:16px;
+    padding:4px;
+}
+
+.character:hover{
+    transform:scale(1.08);
+    opacity:1;
+}
+
+.selected{
+    transform:scale(1.18) !important;
+    box-shadow:0 0 20px rgba(70,166,90,0.5);
+    border:3px solid #5ce29f;
+    opacity:1 !important;
+}
+
+
+/* === BOTÓN === */
+.btn-play{
+    background:#4A6655;
+    color:white;
+    border:none;
+    padding:16px 38px;
+    border-radius:20px;
+    font-size:22px;
+    font-weight:700;
+    cursor:pointer;
+    transition:0.25s;
+    margin-top:28px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.15);
+}
+
+.btn-play:hover{
+    transform:scale(1.06);
+    background:#3c5244;
+}
+
+
+/* CORAZONES ANIMADOS */
+.heart{
+    position:fixed;
+    font-size:22px;
+    color:#E25C6D;
+    opacity:0.7;
+    pointer-events:none;
+    animation: float 6s linear infinite;
+}
+
+@keyframes float{
+    0%{transform:translateY(0) scale(1); opacity:0.9;}
+    100%{transform:translateY(-180px) scale(1.6); opacity:0;}
+}
+
+
+/* === RESPONSIVE === */
+@media (max-width:650px){
+
+    h1{
+        font-size:34px;
+        line-height:1.2;
+    }
+
+    .character{
+        width:120px;
+        margin:8px;
+    }
+
+    #nameBox{
+        width:90%;
+        padding:14px;
+    }
+
+    .btn-play{
+        width:80%;
+        font-size:20px;
+    }
+}
+
+</style>
+</head>
+<body>
+
+<div class="container">
+
+    <h1><span class="emoji">💍</span>Corre por el Amor</h1>
+
+    <p style="max-width:600px;margin:0 auto 20px auto;font-size:19px;">
+        Antes de jugar, ingresá tu <b>nombre y apellido</b> y elegí a tu personaje favorito.
+        *Tu nombre aparecerá en el ranking MUNDIAL 🏆
+    </p>
+
+    <!-- ======================== LOGIN ======================== -->
+    <div id="nameBox">
+        <input id="playerName" type="text" placeholder="Ingresá tu nombre y apellido">
+        <p style="font-size:13px;opacity:.7;margin-top:6px;">
+            Los primeros 3 que consigan más puntos tendran un premio el dia del casamiento. ¡Mucha suerte a todos!
+        </p>
+    </div>
+
+
+    <!-- ======================== PERSONAJES ======================== -->
+    <h3 style="margin-top:30px;font-size:22px;">Elegí tu personaje:</h3>
+
+    <div id="characters">
+
+        <img id="char-left" class="character" src="novio_jump.png" alt="Nachito">
+        <img id="char-right" class="character" src="novia_jump.png" alt="Romi">
+
+    </div>
+
+
+    <!-- ======================== BOTÓN JUGAR ======================== -->
+    <button class="btn-play" onclick="startGame()">
+        ▶️ JUGAR AHORA
+    </button>
+
+</div>
+
+
+<!-- ======================== CORAZONES FLOTANTES ======================== -->
+<script>
+function spawnHeart(){
+    const h=document.createElement("div");
+    h.className="heart";
+    h.textContent="💖";
+    h.style.left=Math.random()*100+"vw";
+    h.style.bottom="-40px";
+    h.style.animationDuration=(4+Math.random()*3)+"s";
+    document.body.appendChild(h);
+    setTimeout(()=>h.remove(),7000);
+}
+setInterval(spawnHeart,900);
+</script>
+
+
+<!-- ======================== LÓGICA DE LOGIN + SELECCIÓN ======================== -->
+<script>
+let chosen = null;
+
+const novio = document.getElementById("char-left");
+const novia = document.getElementById("char-right");
+
+novio.addEventListener("click",()=>{
+    chosen = "novio";
+    novio.classList.add("selected");
+    novia.classList.remove("selected");
+});
+
+novia.addEventListener("click",()=>{
+    chosen = "novia";
+    novia.classList.add("selected");
+    novio.classList.remove("selected");
+});
+
+
+// ======================= VALIDAR Y EMPEZAR =======================
+function startGame(){
+
+    const name = document.getElementById("playerName").value.trim();
+
+    if(name.length < 3){
+        alert("Por favor ingresá tu nombre real (mínimo nombre y apellido).");
+        return;
+    }
+
+    if(!chosen){
+        alert("Elegí un personaje para empezar.");
+        return;
+    }
+
+    // Guardar datos
+    localStorage.setItem("playerName", name);
+    localStorage.setItem("chosenCharacter", chosen);
+
+    // Ir al juego
+    location.href = "juego1.html";
+}
+</script>
+
+
+</body>
+</html>
